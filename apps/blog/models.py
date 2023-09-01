@@ -2,6 +2,8 @@ from django.db import models
 from apps.user_system.models import Model_users
 from ckeditor.fields import RichTextField
 
+import random
+
 
 class Categoryes (models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -13,18 +15,17 @@ class Categoryes (models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = self.name
+            self.slug = "slug_" + self.name
         self.name = self.name.capitalize()
         super().save(*args, **kwargs)
-        
-        
-        
+
+
 class Blogs (models.Model):
-    
-    class Meta :
+
+    class Meta:
         ordering = ["-creation"]
-        
-    title = models.CharField(max_length=100)
+
+    title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(blank=True)
     img = models.ImageField(upload_to="img_blogs", blank=True)
@@ -33,22 +34,16 @@ class Blogs (models.Model):
     public = models.BooleanField(default=False)
     creation = models.DateField(auto_now_add=True)
     update = models.DateField(auto_now=True)
-    
-    user = models.ForeignKey(Model_users,models.CASCADE, null=True)
+
+    user = models.ForeignKey(Model_users, models.CASCADE, null=True)
     category = models.ForeignKey(Categoryes, models.PROTECT, null=True)
-    
+
     def __str__(self):
         return f"blog: {self.title} --- {self.user}"
 
     def save(self, *args, **kwargs):
-        if not self.slug :
-            self.slug = self.title
+        if not self.slug:
+            dato_random = round(random.uniform(100.100, 200.200), 3)
+            self.slug = f"slug_{self.title}_{dato_random}"
         self.description = self.description.capitalize()
         super().save(*args, **kwargs)
-
-    
-    
-        
-    
-        
-    

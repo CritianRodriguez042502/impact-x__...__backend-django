@@ -127,20 +127,31 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEIDA_URL = '/media/'
 
+
+# Config ckeditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_CONFIGS = {
+    'ckeditor': {
+        'toolbar': 'Full',
+    },
+}
+
+
 # Config email with django
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = decouple.config('EMAIL_BACKEND', cast = str)
-EMAIL_HOST_PASSWORD = decouple.config('EMAIL_BACKEND_PASSWORD', cast = str)
+EMAIL_HOST_USER = decouple.config('EMAIL_BACKEND', cast=str)
+EMAIL_HOST_PASSWORD = decouple.config('EMAIL_BACKEND_PASSWORD', cast=str)
 
 
 # Cors headers
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 
-# Rest_framewook_settings 
+# Rest_framewook_settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -159,19 +170,20 @@ AUTH_USER_MODEL = "user_system.Model_users"
 # Djoser Config
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'admin/reset_password/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'admin/reset_username/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'admin/user/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'RESEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'USER_CREATE_PASSWORD_RETYPE': True,
-    'SET_USERNAME_RETYPE':True,
+    'SET_USERNAME_RETYPE': True,
+    'SET_PASSWORD_RETYPE': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS' : ['www.facebook.com'],
-    'PERMISSIONS' : {
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['www.facebook.com'],
+    'PERMISSIONS': {
         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
         'user_create': ['rest_framework.permissions.AllowAny'],
         'user_delete': ['rest_framework.permissions.CurrentUserOrAdmin'],
@@ -179,14 +191,20 @@ DJOSER = {
         'password_reset': ['rest_framework.permissions.AllowAny'],
         'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
     },
-    'SERIALIZERS': {}
+    'SERIALIZERS': {},
+    'EMAIL': {
+        'activation': 'apps.user_system.email.Activation',
+        'confirmation': 'apps.user_system.email.Confirmation',
+        'password_reset': 'apps.user_system.email.PasswordReset',
+        'password_changed_confirmation': 'apps.user_system.email.PasswordChangedConfirmation',
+    }
 }
 
 
 # Config JWT
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=360),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
@@ -213,16 +231,6 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=10),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1)
-}
-
-
-# Config ckeditor 
-CKEDITOR_UPLOAD_PATH = "uploads/"
-
-CKEDITOR_CONFIGS = {
-    'ckeditor': {
-        'toolbar': 'Full',
-    },
 }
