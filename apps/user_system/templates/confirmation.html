@@ -1,21 +1,41 @@
-{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Confirmation </title>
+</head>
+<body>
 
-{% block subject %}
-{% blocktrans %}{{ site_name }} - Your account has been successfully created and activated!{% endblocktrans %}
-{% endblock %}
+    {% load i18n %}
 
-{% block text_body %}
-{% trans "Your account has been created and is ready to use!" %}
+    {% block subject %}
+    {% blocktrans %}{{ site_name }} - Your account has been successfully created and activated!{% endblocktrans %}
+    {% endblock %}
 
-{% trans "Thanks for using our site!" %}
+    {% block text_body %}
+    {% trans "Your account has been created and is ready to use!" %}
 
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
-{% endblock text_body %}
+    {% trans "Thanks for using our site!" %}
 
-{% block html_body %}
-<p>{% trans "Your account has been created and is ready to use!" %}</p>
+    {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+    {% endblock text_body %}
 
-<p>{% trans "Thanks for using our site!" %}</p>
+    {% block html_body %}
+    <h1 style ="font-size: 35px; "> IMPACT X </h1>
 
-<p>{% blocktrans %}The {{ site_name }} team{% endblocktrans %}------</p>
-{% endblock html_body %}
+    <p style = "font-size : 17px"> ¡Su cuenta ha sido creada y está lista para usar! 🧭🧭🧭 </p>
+
+    <p style = "font-size : 17px"> Gracias por usar nuestro sitio 🛠️</p>
+
+    <img src="https://impulsodigital.space/wp-content/uploads/2021/08/img_icon_banner_home-1.png" alt="img" />
+
+    <div style = "margin-top: 35px">
+        <h3> Gracias por utilizar nuestro sitio </h3>
+        <h3 style = "color: rgb(56, 168, 56);"> El equipo de IMPACT X </h3>
+    </div>
+
+    {% endblock html_body %}
+
+</body>
+</html>

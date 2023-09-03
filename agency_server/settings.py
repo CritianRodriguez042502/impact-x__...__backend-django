@@ -69,7 +69,8 @@ ROOT_URLCONF = 'agency_server.urls'
 WSGI_APPLICATION = 'agency_server.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL = 'static/'
+
+STATIC_URL = '/static/'
 
 
 TEMPLATES = [

@@ -1,28 +1,78 @@
-{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Activation email </title>
+</head>
+<body>
 
-{% block subject %}
-{% blocktrans %}Account activation on {{ site_name }}{% endblocktrans %}
-{% endblock subject %}
+    {% load static %}
+   
+    {% load i18n %}
 
-{% block text_body %}
-{% blocktrans %}You're receiving this email because you need to finish activation process on {{ site_name }}.{% endblocktrans %}
+    {% block subject %}
 
-{% trans "Please go to the following page to activate account:" %}
-{{ protocol }}://{{ domain }}/{{ url|safe }}
+    {% blocktrans %}Account activation on {{ site_name }}{% endblocktrans %}
+    {% endblock subject %}
 
-{% trans "Thanks for using our site!" %}
+    {% block text_body %}
+    {% blocktrans %}You're receiving this email because you need to finish activation process on {{ site_name }}.{% endblocktrans %}
 
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
-{% endblock text_body %}
+    {% trans "Please go to the following page to activate account:" %}
+    {{ protocol }}://{{ domain }}/{{ url|safe }}
 
-{% block html_body %}
-<p>{% blocktrans %}You're receiving this email because you need to finish activation process on {{ site_name }}.{% endblocktrans %}</p>
+    {% trans "Thanks for using our site!" %}
 
-<p>{% trans "Please go to the following page to activate account:" %}</p>
-<p><a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+    {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+    {% endblock text_body %}
 
-<p>{% trans "Thanks for using our site!" %}</p>
+    {% block html_body %}
+    <div>
 
-<p>{% blocktrans %}The {{ site_name }} team{% endblocktrans %}------ </p>
+        <h1 style ="font-size: 35px; "> IMPACT X </h1>
+        <h3 style = "
+        color: rgb(56, 168, 56);
+        font-size: 20px;">
+            Free live webinar 
+        </h3> 
+        <p style = "
+        font-size : 17px
+        "> 
+            !Bienvenido a IMPACT X!. Estamos emocionados de tenerte como parte de nuestra comunidad. 
+        </p>
 
-{% endblock html_body %}
+        <p style = "font-size : 17px">
+            {% blocktrans %}Usted esta recibiendo este correo electrónico porque necesita finalizar el proceso de activación en IMPACT X.{% endblocktrans %}
+        </p>
+
+        <p style = "font-size : 17px;">
+            {% trans "Please go to the following page to activate account:" %}
+        </p>
+
+        <p style = "font-size : 16px" >
+            ⬇️⬇️⬇️
+        </p>
+
+        <p style = "font-size : 16px">
+            <a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a>
+        </p>
+
+        <p style = "font-size : 16px">
+            ⬆️⬆️⬆️
+        </p>
+
+        <div class="container">
+            <img src="https://digitalmarketing.net.co/wp-content/uploads/2020/02/agencia-de-marketing-digital-home.png.webp" alt="img">
+        </div>
+
+    </div>
+    <div style = "margin-top: 35px">
+        <h3> Gracias por utilizar nuestro sitio </h3>
+        <h3 style = "color: rgb(56, 168, 56);"> El equipo de IMPACT X </h3>
+    </div>
+    
+    {% endblock html_body %}
+
+</body>
+</html>

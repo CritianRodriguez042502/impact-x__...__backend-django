@@ -1,4 +1,5 @@
-from templated_mail.mail import BaseEmailMessage
+# Otro metodo para enviar correos :)
+# from templated_mail.mail import BaseEmailMessage
 from djoser import email
 
 
@@ -13,4 +14,3 @@ class PasswordReset (email.PasswordResetEmail):
 
 class PasswordChangedConfirmation (email.PasswordChangedConfirmationEmail):
     template_name = "password_changed_confirmation.html"
-    
