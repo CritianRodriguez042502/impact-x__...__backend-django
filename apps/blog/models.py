@@ -2,8 +2,6 @@ from django.db import models
 from apps.user_system.models import Model_users
 from ckeditor.fields import RichTextField
 
-import random
-
 
 class Categoryes (models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -43,7 +41,6 @@ class Blogs (models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            dato_random = round(random.uniform(100.100, 200.200), 3)
-            self.slug = f"slug_{self.title}_{dato_random}"
+            self.slug = f"slug_{self.title}_user:{self.user}"
         self.description = self.description.capitalize()
         super().save(*args, **kwargs)

@@ -149,8 +149,9 @@ def blogDetailByUser (request) :
         return Response({"Error" : "not_Found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+#############
 
-@api_view(["POST"])
+@api_view(["PUT"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 @parser_classes(parser_classes=[JSONParser])
 def updateBlogsByUser (request):
@@ -158,11 +159,18 @@ def updateBlogsByUser (request):
     filter_blog_user = Blogs.objects.filter(user = request.user.id, slug = slug)
     if filter_blog_user :
         for blog in filter_blog_user :
-            blog.title = request.data["title"].capitalize()
+            blog.title = request.data["title"]
+            blog.slug = "slug_" + str(request.data["title"]) + "_" + str(request.user)
             blog.description = request.data["description"].capitalize()
-            blog.public = bool(request.data["public"])
+            public = str(request.data["public"]).capitalize()
+            if public == "True":
+                blog.public = True
+            else :
+                blog.public = False
             blog.save()
             return Response ({"success" : "update completed"}, status=status.HTTP_200_OK)
         
     else :
         return Response({"Error" : "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+
+

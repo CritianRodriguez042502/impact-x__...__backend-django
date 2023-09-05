@@ -6,7 +6,7 @@ from django.conf import settings
 from datetime import timedelta
 from pathlib import Path
 import os
-import decouple
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,13 +36,14 @@ DEFAULT_APPS = [
 
 LIBRERIS = [
     'rest_framework',
-    'corsheaders',
-    'djoser',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'djoser',
+    'social_django',
+    'corsheaders',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
 ]
 
 APPS_PROJECT = [
@@ -57,7 +58,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -68,7 +68,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'agency_server.urls'
 WSGI_APPLICATION = 'agency_server.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 STATIC_URL = '/static/'
 
@@ -84,6 +83,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #### Google ####
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -123,19 +125,53 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Additional settings django _______________________________________________
+# ADDITIONAL SETTINGS DJANGO ____________________________________________________________________
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEIDA_URL = '/media/'
 
 
 # Config ckeditor
-CKEDITOR_UPLOAD_PATH = "uploads/"
-
 CKEDITOR_CONFIGS = {
-    'ckeditor': {
-        'toolbar': 'Full',
-    },
+    'ckeditor': {'toolbar': 'Full',}
+    }
+
+CKEDITOR_UPLOAD_PATH = "/media/"
+
+
+#more middelware
+MIDDLEWARE.insert(0,'django.middleware.common.CommonMiddleware')
+MIDDLEWARE.insert(1,'social_django.middleware.SocialAuthExceptionMiddleware')
+
+
+# Password hashers
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.ScryptPasswordHasher",
+]
+
+
+#Auth backend
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+
+# Rest_framewook_settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
 }
 
 
@@ -144,25 +180,19 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = decouple.config('EMAIL_BACKEND', cast=str)
-EMAIL_HOST_PASSWORD = decouple.config('EMAIL_BACKEND_PASSWORD', cast=str)
+EMAIL_HOST_USER = config('EMAIL_BACKEND', cast=str)
+EMAIL_HOST_PASSWORD = config('EMAIL_BACKEND_PASSWORD', cast=str)
 
 
 # Cors headers
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
+CORS_ORIGIN_WHITELIST = ["http://localhost:5173"]
 
-# Rest_framewook_settings
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
-}
+CORS_ALLOW_CREDENTIALS = True
 
+
+# Domain
 DOMAIN = 'localhost:5173'
 
 # Custom user model
@@ -182,56 +212,41 @@ DJOSER = {
     'SET_PASSWORD_RETYPE': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
-    'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['www.facebook.com'],
-    'PERMISSIONS': {
-        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
-        'user_create': ['rest_framework.permissions.AllowAny'],
-        'user_delete': ['rest_framework.permissions.CurrentUserOrAdmin'],
-        'activation': ['rest_framework.permissions.AllowAny'],
-        'password_reset': ['rest_framework.permissions.AllowAny'],
-        'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
-    },
+    
+    #### Google ####
+    'SOCIAL_AUTH_TOKEN_STRATEGY': "apps.user_system.strategy.TokenStrategy",
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ["http://localhost:5173/access/google"],
+    
     'SERIALIZERS': {},
+    
     'EMAIL': {
         'activation': 'apps.user_system.email.Activation',
         'confirmation': 'apps.user_system.email.Confirmation',
         'password_reset': 'apps.user_system.email.PasswordReset',
         'password_changed_confirmation': 'apps.user_system.email.PasswordChangedConfirmation',
-    }
+    },
 }
+
+
+# Access with google
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_CLIENT_ID', cast = str)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_CLIENT_SECRET', cast = str)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid'
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name', 'username']
 
 
 # Config JWT
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=360),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
+    "AUTH_HEADER_TYPES": ["JWT"],
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=20),
+    "AUTH_TOKEN_CLASESS" : ("rest_framework_simplejwt.tokens.AccessToken",),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
-
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": settings.SECRET_KEY,
-    "VERIFYING_KEY": "",
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "JSON_ENCODER": None,
-    "JWK_URL": None,
-    "LEEWAY": 0,
-
-    "AUTH_HEADER_TYPES": ["JWT"],
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-
-    "JTI_CLAIM": "jti",
-
-    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=10),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1)
 }
