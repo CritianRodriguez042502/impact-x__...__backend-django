@@ -4,9 +4,9 @@ from apps.blog.models import Categoryes,Blogs
 
 @admin.register(Categoryes)
 class CategoryesAdmin (admin.ModelAdmin):
-    list_display = ["name", "creation"]
+    list_display = ["name", "creation", "slug"]
 
 
 @admin.register(Blogs)
 class BlogsAdmin (admin.ModelAdmin):
-    list_display = ["title", "creation", "public"]
+    list_display = ["title", "creation", "public", "category", "user"]

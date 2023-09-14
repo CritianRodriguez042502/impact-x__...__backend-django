@@ -18,10 +18,9 @@ class Model_users (AbstractUser,PermissionsMixin):
     REQUIRED_FIELDS = ['first_name','last_name',"username"]
     
     def __str__(self):
-        return f"User: {self.username}"
+        return self.username
     
     def save(self,*args, **kwargs):
-        self.username = self.username
         self.first_name = self.first_name.capitalize()
         self.last_name = self.last_name.capitalize()
         super().save(*args, **kwargs)

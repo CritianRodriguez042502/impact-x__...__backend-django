@@ -2,14 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view,permission_classes,parser_classes
 from rest_framework import status, exceptions, permissions
 from rest_framework.response import Response
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser,FormParser,FileUploadParser
 
 from django.db.models.query_utils import Q
 
 from apps.blog.pagination import SmallPagination,MediumPagination, BigPagination
 from apps.blog.serializer import CategorySerializers, BlogsSerializers
 from apps.blog.models import Categoryes, Blogs
-from apps.user_system.models import Model_users
+
 
 
 
@@ -89,10 +89,10 @@ class BLogDetail (APIView):
                 return Response(seiralizer.data)
             
             else :
-                return Response({"erorr": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"erorr": "Este blog no existe"}, status=status.HTTP_404_NOT_FOUND)
         
         else :
-            return Response({"erorr": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"erorr": "not_Foundd"}, status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -124,7 +124,7 @@ class SearchBlogs (APIView):
 @api_view(["GET"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 def BlogByUser (request) : 
-    blogs_user = Blogs.objects.order_by("-creation").filter(user = request.user.id, public = True)
+    blogs_user = Blogs.objects.order_by("-update").filter(user = request.user.id)
     if blogs_user :
         pagination = SmallPagination()
         response = pagination.paginate_queryset(blogs_user, request)
@@ -160,7 +160,7 @@ def updateBlogsByUser (request):
     if filter_blog_user :
         for blog in filter_blog_user :
             blog.title = request.data["title"]
-            blog.slug = "slug_" + str(request.data["title"]) + "_" + str(request.user)
+            blog.slug = "slug" + str(request.data["title"])
             blog.description = request.data["description"].capitalize()
             public = str(request.data["public"]).capitalize()
             if public == "True":
@@ -172,5 +172,6 @@ def updateBlogsByUser (request):
         
     else :
         return Response({"Error" : "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 

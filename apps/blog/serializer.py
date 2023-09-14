@@ -6,7 +6,7 @@ from apps.user_system.serializer import ModelUserDjoserSerializers
 class CategorySerializers (serializers.ModelSerializer):
     class Meta:
         model = Categoryes
-        fields = ["name", "slug", "creation"]
+        fields = ["id","name", "slug", "creation"]
 
 
 class BlogsSerializers (serializers.ModelSerializer):
@@ -15,5 +15,5 @@ class BlogsSerializers (serializers.ModelSerializer):
     
     class Meta:
         model = Blogs
-        fields = ["title", "description", "slug", "content", "img", "views", "public", "creation", "update", "user", "category"]
+        fields = ["id","title", "description", "slug", "content", "img", "views", "public", "creation", "update", "user", "category"]
         

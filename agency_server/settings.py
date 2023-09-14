@@ -215,7 +215,7 @@ DJOSER = {
     
     #### Google ####
     'SOCIAL_AUTH_TOKEN_STRATEGY': "apps.user_system.strategy.TokenStrategy",
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ["http://localhost:5173/access/google"],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ["http://localhost:5173/access/signin"],
     
     'SERIALIZERS': {},
     

@@ -9,14 +9,15 @@ class Categoryes (models.Model):
     creation = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"Category: {self.name}"
+        return self.name
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = "slug_" + self.name
+            self.slug = f"slug{self.name}slug"
+            self.slug.lower()
         self.name = self.name.capitalize()
         super().save(*args, **kwargs)
-
+      
 
 class Blogs (models.Model):
 
@@ -35,12 +36,13 @@ class Blogs (models.Model):
 
     user = models.ForeignKey(Model_users, models.CASCADE, null=True)
     category = models.ForeignKey(Categoryes, models.PROTECT, null=True)
-
+    
     def __str__(self):
-        return f"blog: {self.title} --- {self.user}"
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = f"slug_{self.title}_user:{self.user}"
+            self.slug = f"slug{self.title.lower()}slug"
+            self.slug.lower()
         self.description = self.description.capitalize()
         super().save(*args, **kwargs)
