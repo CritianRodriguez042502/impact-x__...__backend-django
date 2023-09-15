@@ -24,11 +24,11 @@ class Blogs (models.Model):
     class Meta:
         ordering = ["-creation"]
 
-    title = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = models.TextField(blank=True)
     img = models.ImageField(upload_to="img_blogs", blank=True)
-    content = RichTextField(config_name='ckeditor')
+    content = RichTextField(config_name='ckeditor', blank=True)
     views = models.IntegerField(default=0)
     public = models.BooleanField(default=False)
     creation = models.DateField(auto_now_add=True)

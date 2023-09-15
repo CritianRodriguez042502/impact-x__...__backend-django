@@ -14,7 +14,9 @@ urls_blog = [
 urls_blog_by_user = [
     path('blog_by_user/', views.BlogByUser),
     path('blog_detail_by_user/', views.blogDetailByUser),
-    path('update_blogs_by_user/', views.updateBlogsByUser)
+    path("create_blog_by_user/", views.createBlogUser),
+    path('update_blogs_by_user/', views.updateBlogsByUser),
+    path('delete_blog_by_user/', views.DeleteBlogByUser)
 ]
 
 urlpatterns = urls_blog + urls_blog_by_user
