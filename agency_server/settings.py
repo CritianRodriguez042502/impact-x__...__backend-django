@@ -34,6 +34,12 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
+APPS_PROJECT = [
+    'apps.user_system',
+    'apps.blog',
+    'apps.dashboard',
+]
+
 LIBRERIS = [
     'rest_framework',
     'rest_framework.authtoken',
@@ -46,12 +52,10 @@ LIBRERIS = [
     'ckeditor_uploader',
 ]
 
-APPS_PROJECT = [
-    'apps.blog',
-    'apps.user_system'
-]
-
-INSTALLED_APPS = DEFAULT_APPS + LIBRERIS + APPS_PROJECT
+INSTALLED_APPS = []
+INSTALLED_APPS.extend(DEFAULT_APPS)
+INSTALLED_APPS.extend(APPS_PROJECT)
+INSTALLED_APPS.extend(LIBRERIS)
 
 
 MIDDLEWARE = [
@@ -243,7 +247,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name', 'username']
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ["JWT"],
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=20),
     "AUTH_TOKEN_CLASESS" : ("rest_framework_simplejwt.tokens.AccessToken",),
     "ROTATE_REFRESH_TOKENS": True,
