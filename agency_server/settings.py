@@ -61,7 +61,7 @@ INSTALLED_APPS.extend(LIBRERIS)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -131,6 +131,12 @@ USE_TZ = True
 
 # ADDITIONAL SETTINGS DJANGO ____________________________________________________________________
 
+#more middelware
+MIDDLEWARE.insert(0,'corsheaders.middleware.CorsMiddleware')
+MIDDLEWARE.insert(1,'social_django.middleware.SocialAuthExceptionMiddleware')
+MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEIDA_URL = '/media/'
 
@@ -142,10 +148,6 @@ CKEDITOR_CONFIGS = {
 
 CKEDITOR_UPLOAD_PATH = "/media/"
 
-
-#more middelware
-MIDDLEWARE.insert(0,'django.middleware.common.CommonMiddleware')
-MIDDLEWARE.insert(1,'social_django.middleware.SocialAuthExceptionMiddleware')
 
 
 # Password hashers
