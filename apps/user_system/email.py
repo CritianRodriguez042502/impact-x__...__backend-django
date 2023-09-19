@@ -1,7 +1,7 @@
-# Otro metodo para enviar correos :)
-# from templated_mail.mail import BaseEmailMessage
-from djoser import email
+# from django.core.mail import send_mail
 
+
+from djoser import email
 
 class Activation (email.ActivationEmail):
     template_name = "activation.html"

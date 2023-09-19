@@ -134,7 +134,6 @@ USE_TZ = True
 #more middelware
 MIDDLEWARE.insert(0,'corsheaders.middleware.CorsMiddleware')
 MIDDLEWARE.insert(1,'social_django.middleware.SocialAuthExceptionMiddleware')
-MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -147,7 +146,6 @@ CKEDITOR_CONFIGS = {
     }
 
 CKEDITOR_UPLOAD_PATH = "/media/"
-
 
 
 # Password hashers
