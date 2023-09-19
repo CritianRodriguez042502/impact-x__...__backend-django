@@ -3,7 +3,6 @@ from rest_framework import status,permissions
 from rest_framework.response import Response
 
 from django.db.models.query_utils import Q
-from django.core.mail import send_mail
 
 from apps.blog.pagination import MediumPagination, BigPagination
 from apps.blog.serializer import CategorySerializers, BlogsSerializers
