@@ -11,7 +11,11 @@ from apps.blog.serializer import BlogsSerializers
 
 from apps.dashboard.utils import generate_random_string
 
+from apps.blog_reactions.models import LikeBlog
+
 from random import uniform
+
+
 
 # =============== Isauthenticated user ===============
 
@@ -54,6 +58,7 @@ def createBlogUser(request):
     
     string_random = str(generate_random_string(25)).lower()
     num_random = str(round(uniform(1,400)))
+    backup_slug = slugify(str(user.username) + "slug" + str(request.data["title"]) + string_random + num_random)
      
     public = False    
     if str(request.data["public"]).lower() == "true" :
@@ -72,20 +77,51 @@ def createBlogUser(request):
             user = user
         )
         new_blog.save()
-        return Response({"success": "Blog creado"}, status=status.HTTP_201_CREATED)
+        
+        try :
+            slug_to_select_blog_model = slugify(str(user.username) + "slug" + str(request.data["title"]))
+            blog_for_like_model = Blogs.objects.get(slug = slug_to_select_blog_model) 
+            new_like_model = LikeBlog.objects.create(
+            like = 0,
+            selected = False,
+            blog = blog_for_like_model,
+            user = user
+            )
+            new_like_model.save()
+            return Response({"success": "Blog creado"}, status=status.HTTP_201_CREATED)
+        
+        except :
+            return Response ({"error" : "Error"}, status=status.HTTP_409_CONFLICT)
+             
     except :
+        
         try :
             new_blog = Blogs.objects.create(
                 title = request.data["title"],
                 description = request.data["description"].capitalize(),
                 public = public,
-                slug = slugify(str(user.username) + "slug" + str(request.data["title"]) + string_random + num_random),
+                slug = backup_slug,
                 content = str(request.data["content"]),
                 category = select_category,
                 user = user
             )
             new_blog.save()
-            return Response({"success": "Blog creado"}, status=status.HTTP_201_CREATED)
+            
+            try :
+                blog_for_like_model = Blogs.objects.get(slug = backup_slug)
+           
+                new_like_model = LikeBlog.objects.create(
+                    like = 0,
+                    selected = False,
+                    blog = blog_for_like_model,
+                    user = user
+                )
+                new_like_model.save()
+                return Response({"success": "Blog creado"}, status=status.HTTP_201_CREATED)
+            
+            except :
+                return Response ({"error" : "Error"}, status=status.HTTP_409_CONFLICT)
+            
         except :
             return Response ({"error" : "Error"}, status=status.HTTP_409_CONFLICT)
     

@@ -38,6 +38,7 @@ APPS_PROJECT = [
     'apps.user_system',
     'apps.blog',
     'apps.dashboard',
+    'apps.blog_reactions',
 ]
 
 LIBRERIS = [

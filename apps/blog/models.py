@@ -1,8 +1,8 @@
 from django.db import models
-from apps.user_system.models import Model_users
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
 
+from apps.user_system.models import Model_users
 
 
 class Categoryes (models.Model):
@@ -31,11 +31,9 @@ class Blogs (models.Model):
     description = models.TextField()
     img = models.ImageField(upload_to="img_blogs", blank=True)
     content = RichTextField(config_name='ckeditor')
-    views = models.IntegerField(default=0)
     public = models.BooleanField(default=False)
     creation = models.DateField(auto_now_add=True)
     update = models.DateField(auto_now=True)
-
     user = models.ForeignKey(Model_users, models.CASCADE, null=True)
     category = models.ForeignKey(Categoryes, models.PROTECT, null=True)
     

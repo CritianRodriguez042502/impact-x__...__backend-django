@@ -8,6 +8,9 @@ from apps.blog.pagination import MediumPagination, BigPagination
 from apps.blog.serializer import CategorySerializers, BlogsSerializers
 from apps.blog.models import Categoryes, Blogs
 
+from apps.blog_reactions.models import LikeBlog
+from apps.blog_reactions.serializer import LikesSerializer
+
 
 # All categoryes
 class AllCategorys (APIView):
@@ -75,11 +78,11 @@ class BLogDetail (APIView):
     def get(self, request, format=None):
         if Blogs.objects.all():
             slug = request.query_params.get("slug")
-            blog = Blogs.objects.filter(slug=slug)
-
+            blog = Blogs.objects.filter(slug = slug)
+            
             if blog:
                 seiralizer = BlogsSerializers(blog, many=True)
-                return Response(seiralizer.data)
+                return Response(seiralizer.data,status=status.HTTP_200_OK)
 
             else:
                 return Response({"erorr": "Este blog no existe"}, status=status.HTTP_404_NOT_FOUND)
@@ -87,6 +90,37 @@ class BLogDetail (APIView):
         else:
             return Response({"erorr": "not_Foundd"}, status=status.HTTP_404_NOT_FOUND)
 
+
+
+class GetBlogLikes (APIView) :
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self,request,format=None) :
+        
+        if Blogs.objects.all().exists() :
+            slug = request.query_params.get("slug")
+            blog_model = Blogs.objects.get(slug = slug)
+            
+            if blog_model :
+                filter_likes_blog = LikeBlog.objects.filter(blog = blog_model.id)
+                all_likes = []
+                for data in filter_likes_blog :
+                    all_likes.append(data.like)
+                    
+                serializer = LikesSerializer(filter_likes_blog, many = True)
+                return Response ({
+                    "all_likes" : sum(all_likes),
+                    "likes_details" : serializer.data
+                },status=status.HTTP_200_OK)
+        
+            else:
+                return Response({"erorr": "Este blog no existe"}, status=status.HTTP_404_NOT_FOUND)
+            
+        else:
+                return Response({"erorr": "Este blog no existe"}, status=status.HTTP_404_NOT_FOUND)
+                
+            
+            
 
 class SearchBlogs (APIView):
     permission_classes = [permissions.AllowAny]
