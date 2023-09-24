@@ -22,22 +22,27 @@ from random import uniform
 @api_view(["GET"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 def BlogByUser(request):
-    blogs_user = Blogs.objects.order_by("-update").filter(user=request.user.id)
+    blogs_user = Blogs.objects.order_by("-update").filter(user = request.user.id)
+    
     if blogs_user:
+        
         pagination = MediumPagination()
         response = pagination.paginate_queryset(blogs_user, request)
         serializer = BlogsSerializers(response, many=True)
+        print(blogs_user)
         return pagination.get_paginated_response(serializer.data)
 
     else:
         return Response({"not_Found": "404"}, status=status.HTTP_404_NOT_FOUND)
 
 
+
 @api_view(["GET"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 def blogDetailByUser(request):
     slug = request.query_params.get("slug")
-    filter_blog_user = Blogs.objects.filter(user=request.user.id, slug=slug)
+    filter_blog_user = Blogs.objects.filter(user = request.user.id, slug = slug)
+    
     if filter_blog_user:
         serializer = BlogsSerializers(filter_blog_user, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -175,8 +180,10 @@ def updateBlogsByUser(request):
 def DeleteBlogByUser(request):
     slug = request.query_params.get("slug")
     filter_blog = Blogs.objects.filter(slug=slug)
+    
     if len(filter_blog) != 0:
         filter_blog.delete()
         return Response({"success": "Blog eliminado correctamente"}, status=status.HTTP_202_ACCEPTED)
+    
     else:
         return Response({"Error": "Error"}, status=status.HTTP_403_FORBIDDEN)

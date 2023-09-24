@@ -9,5 +9,6 @@ urlpatterns = [
     path('blog_by_category/', views.BlogsByCategoryView.as_view()),
     path('blog_detail/', views.BLogDetail.as_view()),
     path("get_blog_likes/", views.GetBlogLikes.as_view()),
+    path('get_blog_comments/', views.GetBlogComments.as_view()),
     path('search_blogs/', views.SearchBlogs.as_view()),
 ]
