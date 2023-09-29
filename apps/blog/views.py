@@ -141,17 +141,13 @@ class GetBlogComments (APIView) :
                 for data in filter_blog :
                     filter_blog_comments = CommentsBlog.objects.order_by("-update").order_by("-creation").filter(blog = data.id) 
                     
-                    if len(filter_blog_comments) != 0 :
-                        pagination = PaginationCommentsBlog()
-                        response = pagination.paginate_queryset(filter_blog_comments, request)
-                        serializer = CommentsBlogSerializer(response, many = True)
-                        return pagination.get_paginated_response({
-                            "all" : len(filter_blog_comments),
-                            "data" : serializer.data,
-                        })
-                    
-                    else :
-                        return Response({"erorr": "No existen comentarios"}, status=status.HTTP_404_NOT_FOUND)
+                    pagination = PaginationCommentsBlog()
+                    response = pagination.paginate_queryset(filter_blog_comments, request)
+                    serializer = CommentsBlogSerializer(response, many = True)
+                    return pagination.get_paginated_response({
+                        "all" : len(filter_blog_comments),
+                        "data" : serializer.data,
+                    })
                     
             else :
                 return Response({"erorr": "Este blog no existe"}, status=status.HTTP_404_NOT_FOUND)

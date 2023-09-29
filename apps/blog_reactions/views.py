@@ -62,11 +62,12 @@ class Likes (APIView):
                 
 
 class Comments (APIView) :
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser, FormParser]
     
     # Get Detailed blog comment
     def get (self, request, format = None) :
+        
         filter_comment_blog = CommentsBlog.objects.filter(unique_brand = request.data["unique_key"], user = request.user.id)
         
         if filter_comment_blog and len(filter_comment_blog) == 1 :

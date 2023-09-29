@@ -16,4 +16,4 @@ class CommentsBlogSerializer (ModelSerializer) :
     
     class Meta :
         model = CommentsBlog
-        fields = ["comments", "unique_brand", "blog", "user"]
+        fields = ["id","comments", "creation", "update", "unique_brand", "blog", "user"]
