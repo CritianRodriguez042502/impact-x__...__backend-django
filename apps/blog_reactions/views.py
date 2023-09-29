@@ -67,8 +67,8 @@ class Comments (APIView) :
     
     # Get Detailed blog comment
     def get (self, request, format = None) :
-        
-        filter_comment_blog = CommentsBlog.objects.filter(unique_brand = request.data["unique_key"], user = request.user.id)
+        unique_brand = request.query_paramas.get("unique_brand")
+        filter_comment_blog = CommentsBlog.objects.filter(unique_brand = unique_brand , user = request.user.id)
         
         if filter_comment_blog and len(filter_comment_blog) == 1 :
             for data in filter_comment_blog :
