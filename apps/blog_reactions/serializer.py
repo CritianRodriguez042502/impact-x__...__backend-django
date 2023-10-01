@@ -8,7 +8,7 @@ class LikesSerializer (ModelSerializer):
     
     class Meta :
         model = LikeBlog
-        fields = ["like", "selected", "blog", "user"]
+        fields = ["id","like", "selected", "blog", "user"]
     
 
 class CommentsBlogSerializer (ModelSerializer) :

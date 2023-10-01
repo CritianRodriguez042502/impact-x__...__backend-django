@@ -11,7 +11,8 @@ from apps.blog.serializer import BlogsSerializers
 
 from apps.dashboard.utils import generate_random_string
 
-from apps.blog_reactions.models import LikeBlog
+from apps.blog_reactions.models import LikeBlog,CommentsBlog
+from apps.blog_reactions.serializer import LikesSerializer,CommentsBlogSerializer
 
 from random import uniform
 
@@ -51,6 +52,32 @@ def blogDetailByUser(request):
         return Response({"Error": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(["GET"])
+@permission_classes(permission_classes=[permissions.AllowAny])
+def getUserBlogReactions (request) :
+    slug = request.query_params.get("slug")
+    filter_blog = Blogs.objects.filter(slug = slug)
+    filter_comments = []
+    filter_likes = []
+    
+    if filter_blog and len(filter_blog) == 1 :
+        for data in filter_blog :
+            likes = LikeBlog.objects.filter(blog = data.id)
+            filter_likes.extend(likes)
+        for data in filter_blog :
+           comments = CommentsBlog.objects.filter(blog = data.id)
+           filter_comments.extend(comments)
+        
+        serializer_likes = LikesSerializer(filter_likes, many = True)
+        serializer_comments = CommentsBlogSerializer(filter_comments, many = True)
+        
+        return Response({
+            "likes" : serializer_likes.data,
+            "comments" : serializer_comments.data
+        }, status=status.HTTP_200_OK)
+    
+    else :
+        return Response ({"error" : "Error"}, status=status.HTTP_409_CONFLICT)
 
 # =============== Create, Update and delete Blogs ===============
 
