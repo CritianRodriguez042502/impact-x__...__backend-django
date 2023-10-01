@@ -62,13 +62,13 @@ class Likes (APIView):
                 
 
 class Comments (APIView) :
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     parser_classes = [JSONParser, FormParser]
     
     # Get Detailed blog comment
     def get (self, request, format = None) :
-        unique_brand = request.query_paramas.get("unique_brand")
-        filter_comment_blog = CommentsBlog.objects.filter(unique_brand = unique_brand , user = request.user.id)
+        unique_brand = request.query_params.get("unique_brand")
+        filter_comment_blog = CommentsBlog.objects.filter(unique_brand = unique_brand, user = request.user.id)
         
         if filter_comment_blog and len(filter_comment_blog) == 1 :
             for data in filter_comment_blog :
@@ -90,7 +90,7 @@ class Comments (APIView) :
                 user = user
             )
             new_comment.save()
-            return Response ({"success": "success"}, status=status.HTTP_201_CREATED)
+            return Response ({"success": "success"}, status=status.HTTP_200_OK)
         
         except :  
             return Response({"error" : "error"}, status=status.HTTP_409_CONFLICT)
@@ -107,7 +107,7 @@ class Comments (APIView) :
                 data.comments = request.data["content"]
                 data.unique_brand = unique_brand
                 data.save()
-            return Response({"Success" : "Success"}, status=status.HTTP_202_ACCEPTED)
+            return Response({"Success" : "Success"}, status=status.HTTP_200_OK)
         
         else :
             
@@ -115,12 +115,12 @@ class Comments (APIView) :
     
     
     def delete(self,request, format = None) :
-        unique_key = request.data["unique_key"]
+        unique_key = request.query_params.get("unique_key")
         filter_comment = CommentsBlog.objects.filter(unique_brand = unique_key)
         
         if filter_comment and len(filter_comment) == 1 :
             filter_comment.delete()
-            return Response({"success" : "success"}, status=status.HTTP_202_ACCEPTED)
+            return Response({"success" : "success"}, status=status.HTTP_200_OK)
     
         else :
            return Response({"error" : "Parece que hay problemas de inconsistencia"}, status=status.HTTP_409_CONFLICT)
