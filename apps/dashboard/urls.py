@@ -10,8 +10,13 @@ urlpatterns = [
     path('delete_blog_by_user/', views.DeleteBlogByUser),
 ]
 
+usernames = [
+    path("get_all_usernames/", views.getAllUsernames)
+]
+
 likes_and_comment = [
     path('get_user_blog_reactions/', views.getUserBlogReactions)
 ]
 
 urlpatterns.extend(likes_and_comment)
+urlpatterns.extend(usernames)
