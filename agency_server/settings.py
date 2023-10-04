@@ -248,7 +248,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name', 'username']
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ["JWT"],
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=20),
     "AUTH_TOKEN_CLASESS" : ("rest_framework_simplejwt.tokens.AccessToken",),
     "ROTATE_REFRESH_TOKENS": True,

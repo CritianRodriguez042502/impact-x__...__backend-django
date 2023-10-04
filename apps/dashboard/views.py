@@ -181,7 +181,7 @@ def createBlogUser(request):
 
 @api_view(["PUT"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
-@parser_classes(parser_classes=[JSONParser])
+@parser_classes(parser_classes=[JSONParser,FormParser, MultiPartParser])
 def updateBlogsByUser(request):
     slug = request.query_params.get("slug")
     user = request.user
@@ -203,12 +203,16 @@ def updateBlogsByUser(request):
                 blog.public = True
             else:
                 blog.public = False
-
+            
+            try :
+                blog.img = request.FILES["file"]
+            except :
+                False
+                
             blog.category = filter_category
 
             try:
-                blog.slug = slugify(str(user.username) +
-                                    "slug" + str(request.data["title"]))
+                blog.slug = slugify(str(user.username) + "slug" + str(request.data["title"]))
                 blog.save()
                 return Response({"success": "update completed"}, status=status.HTTP_200_OK)
 

@@ -23,8 +23,3 @@ def userProfilePicture (request) :
             return Response({"Error" : "Error"}, status=status.HTTP_409_CONFLICT)
         
     
-@api_view(["PUT"])
-@permission_classes([permissions.IsAuthenticated])
-@parser_classes([FormParser,MultiPartParser])
-def updateBlogImage (request) :
-    return Response("Bien")

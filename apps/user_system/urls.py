@@ -10,7 +10,6 @@ urlpatterns = [
 
 uploadImg = [
     path("upload_img_user/", views.userProfilePicture, name="uploadImg"),
-    path("upload_img_blog/", views.updateBlogImage, name="UpdateImg")
 ]
 
 urlpatterns += uploadImg
