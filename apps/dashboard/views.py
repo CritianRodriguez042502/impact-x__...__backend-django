@@ -1,9 +1,11 @@
 from django.utils.text import slugify
+from django.http import JsonResponse
+
 
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework import permissions, status
 from rest_framework.response import Response
-from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 
 from apps.blog.models import Blogs, Categoryes
 from apps.blog.pagination import MediumPagination
@@ -98,7 +100,7 @@ def getUserBlogReactions(request):
 
 @api_view(["POST"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
-@parser_classes(parser_classes=[JSONParser, FormParser, FileUploadParser])
+@parser_classes(parser_classes=[JSONParser, FormParser, MultiPartParser])
 def createBlogUser(request):
     user = request.user
     select_category = Categoryes.objects.get(name=request.data["category"])
@@ -106,7 +108,7 @@ def createBlogUser(request):
     string_random = str(generate_random_string(25)).lower()
     num_random = str(round(uniform(1, 400)))
     backup_slug = slugify(str(user.username) + "slug" + str(request.data["title"]) + string_random + num_random)
-
+    
     public = False
     if str(request.data["public"]).lower() == "true":
         public = True
@@ -118,6 +120,7 @@ def createBlogUser(request):
             title=request.data["title"],
             description=request.data["description"].capitalize(),
             public=public,
+            img = request.FILES["file"],
             slug=slugify(str(user.username) + "slug" + str(request.data["title"])),
             content=str(request.data["content"]),
             category=select_category,
@@ -149,6 +152,7 @@ def createBlogUser(request):
                 title=request.data["title"],
                 description=request.data["description"].capitalize(),
                 public=public,
+                img = request.FILES["file"],
                 slug=backup_slug,
                 content=str(request.data["content"]),
                 category=select_category,
@@ -232,3 +236,5 @@ def DeleteBlogByUser(request):
 
     else:
         return Response({"Error": "Error"}, status=status.HTTP_403_FORBIDDEN)
+    
+

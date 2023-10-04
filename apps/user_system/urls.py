@@ -1,5 +1,5 @@
 from django.urls import path, include
-
+from apps.user_system import views
 
 urlpatterns = [
     path("auth/", include("djoser.urls")),
@@ -7,3 +7,10 @@ urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),
     path("auth/", include('djoser.social.urls')),
 ]
+
+uploadImg = [
+    path("upload_img_user/", views.userProfilePicture, name="uploadImg"),
+    path("upload_img_blog/", views.updateBlogImage, name="UpdateImg")
+]
+
+urlpatterns += uploadImg

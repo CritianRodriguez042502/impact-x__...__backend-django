@@ -15,7 +15,7 @@ class Model_users (AbstractUser,PermissionsMixin):
     update = models.DateField(auto_now=True)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name','last_name',"username"]
+    REQUIRED_FIELDS = ['first_name','last_name',"username", "img"]
     
     def __str__(self):
         return self.username
