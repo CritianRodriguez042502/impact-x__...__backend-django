@@ -39,12 +39,15 @@ def getAllUsernames(request):
 @api_view(["GET"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 def BlogByUser(request):
+    blog_user_list = []
     blogs_user = Blogs.objects.order_by("creation").filter(user=request.user.id)
-
+    blog_user_list.extend(blogs_user)
+    blog_user_list.reverse()
+    
     if blogs_user:
-
+        
         pagination = MediumPagination()
-        response = pagination.paginate_queryset(blogs_user, request)
+        response = pagination.paginate_queryset(blog_user_list, request)
         serializer = BlogsSerializers(response, many=True)
        
         return pagination.get_paginated_response(serializer.data)

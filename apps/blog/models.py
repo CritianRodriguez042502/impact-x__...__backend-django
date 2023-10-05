@@ -22,10 +22,10 @@ class Categoryes (models.Model):
       
 
 class Blogs (models.Model):
-
-    class Meta:
+    
+    class Meta :
         ordering = ["-creation"]
-
+        
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField()

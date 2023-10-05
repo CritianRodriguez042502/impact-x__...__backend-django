@@ -1,3 +1,5 @@
+from django.core.cache import cache
+
 from rest_framework.views import APIView
 from rest_framework import status,permissions
 from rest_framework.response import Response
@@ -14,6 +16,8 @@ from apps.blog_reactions.models import CommentsBlog
 from apps.blog_reactions.serializer import CommentsBlogSerializer
 
 
+cache.clear()
+
 # All categoryes
 class AllCategorys (APIView):
     permission_classes = [permissions.AllowAny]
@@ -28,19 +32,24 @@ class AllCategorys (APIView):
 
 
 # all blogs
-class AllBlogs (APIView):
+class AllBlogs(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-
-        if Blogs.objects.order_by("-creation").all():
-            filter_blogs = Blogs.objects.filter(public=True)
+        # Obtén todos los blogs públicos y ordénalos por fecha de creación descendente
+        filter_blogs_list = []
+        filter_blogs = Blogs.objects.filter(public=True).order_by("-creation")
+        filter_blogs_list.extend(filter_blogs)
+        filter_blogs_list.reverse()
+        
+        if filter_blogs.exists():
             pagination = MediumPagination()
-            response = pagination.paginate_queryset(filter_blogs, request)
+            response = pagination.paginate_queryset(filter_blogs_list, request)
             serializer = BlogsSerializers(response, many=True)
             return pagination.get_paginated_response(serializer.data)
         else:
             return Response({"Error": "No existen blogs amigo"}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 # Blogs by category view
@@ -57,6 +66,7 @@ class BlogsByCategoryView (APIView):
                 for data in filter_category:
                     blogs.extend(Blogs.objects.filter(
                         category=data.id, public=True))
+                    blogs.reverse()
 
                 if blogs:
                     pagination = MediumPagination()
@@ -164,12 +174,15 @@ class SearchBlogs (APIView):
 
         if Blogs.objects.all():
             slug = request.query_params.get("slug")
+            blogs_list = []
             blogs = Blogs.objects.order_by(
                 "-creation").filter(Q(title__startswith=slug), public=True)
-
+            blogs_list.extend(blogs)
+            blogs_list.reverse()
+            
             if blogs:
                 pagination = BigPagination()
-                response = pagination.paginate_queryset(blogs, request)
+                response = pagination.paginate_queryset(blogs_list, request)
                 serializer = BlogsSerializers(response, many=True)
                 return pagination.get_paginated_response(serializer.data)
 
