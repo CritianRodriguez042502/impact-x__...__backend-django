@@ -8,8 +8,8 @@ class SmallPagination (PageNumberPagination):
 
 class MediumPagination (PageNumberPagination):
     page_query_param = "page"
-    page_size = 6
-    max_page_size = 6
+    page_size = 5
+    max_page_size = 5
     
 
 class BigPagination (PageNumberPagination):

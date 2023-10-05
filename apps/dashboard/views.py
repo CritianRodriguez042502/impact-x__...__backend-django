@@ -39,7 +39,7 @@ def getAllUsernames(request):
 @api_view(["GET"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 def BlogByUser(request):
-    blogs_user = Blogs.objects.order_by("-update").filter(user=request.user.id)
+    blogs_user = Blogs.objects.order_by("creation").filter(user=request.user.id)
 
     if blogs_user:
 
@@ -82,7 +82,7 @@ def getUserBlogReactions(request):
         for data in filter_blog:
             comments = CommentsBlog.objects.filter(blog=data.id)
             filter_comments.extend(comments)
-
+        
         serializer_likes = LikesSerializer(filter_likes, many=True)
         serializer_comments = CommentsBlogSerializer(
             filter_comments, many=True)
