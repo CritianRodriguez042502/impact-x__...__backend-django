@@ -18,16 +18,6 @@ from apps.blog_reactions.serializer import CommentsBlogSerializer
 
 cache.clear()
 
-def info () :
-    #software = Categoryes.objects.create(name="Software", slug="slugSoftware")
-    #marketing = Categoryes.objects.create(name="Marketing", slug="slugMarketing")
-    #juegos = Categoryes.objects.create(name="Videojuegos", slug="slugVideojuegos")
-    #ciberseguridad = Categoryes.objects.create(name="Ciberseguridad", slug="slugCiberseguridad")
-    #robotica = Categoryes.objects.create(name="Robotica", slug="slugRobotica")
-    print("Hola")
-
-info()
-
 
 # All categoryes
 class AllCategorys (APIView):
