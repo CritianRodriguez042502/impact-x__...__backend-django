@@ -3,6 +3,7 @@ Django settings for agency_server project.
 Django version = 4.2.4.
 """
 from django.conf import settings
+import dj_database_url
 from datetime import timedelta
 from pathlib import Path
 import os
@@ -11,18 +12,22 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wzc4@35lmrbnxmm7$0xhbsw*ol6x)-#7nw#hv+c9ng^#!jl6ch'
+#SECRET_KEY = 'django-insecure-wzc4@35lmrbnxmm7$0xhbsw*ol6x)-#7nw#hv+c9ng^#!jl6ch'
+# --- SECRET KEY DEPLOY ---
+SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Default apps
 DEFAULT_APPS = [
@@ -58,9 +63,9 @@ INSTALLED_APPS.extend(DEFAULT_APPS)
 INSTALLED_APPS.extend(APPS_PROJECT)
 INSTALLED_APPS.extend(LIBRERIS)
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,13 +74,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 ROOT_URLCONF = 'agency_server.urls'
 WSGI_APPLICATION = 'agency_server.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 
+if not DEBUG:   
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 TEMPLATES = [
     {
@@ -96,15 +103,24 @@ TEMPLATES = [
     },
 ]
 
-
+# ---------------------------------------
 # Database in production
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
+# data base en deploy
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:postgres@localhost/postgres',
+        conn_max_age=600
+    )
 }
 
+#------------------------------------------
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -122,13 +138,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = 'es'
 TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True
-
 
 # ADDITIONAL SETTINGS DJANGO ____________________________________________________________________
 
@@ -136,10 +150,8 @@ USE_TZ = True
 MIDDLEWARE.insert(0,'corsheaders.middleware.CorsMiddleware')
 MIDDLEWARE.insert(1,'social_django.middleware.SocialAuthExceptionMiddleware')
 
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
 
 # Config ckeditor
 CKEDITOR_CONFIGS = {
@@ -147,7 +159,6 @@ CKEDITOR_CONFIGS = {
     }
 
 CKEDITOR_UPLOAD_PATH = "/media/"
-
 
 # Password hashers
 PASSWORD_HASHERS = [
@@ -158,13 +169,11 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
 
-
 #Auth backend
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend'
 )
-
 
 # Rest_framewook_settings
 REST_FRAMEWORK = {
@@ -179,7 +188,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-
 # Config email with django
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -188,14 +196,12 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_BACKEND', cast=str)
 EMAIL_HOST_PASSWORD = config('EMAIL_BACKEND_PASSWORD', cast=str)
 
-
 # Cors headers
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 CORS_ORIGIN_WHITELIST = ["http://localhost:5173"]
 
 CORS_ALLOW_CREDENTIALS = True
-
 
 # Domain
 DOMAIN = 'localhost:5173'
@@ -232,7 +238,6 @@ DJOSER = {
     },
 }
 
-
 # Access with google
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_CLIENT_ID', cast = str)
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_CLIENT_SECRET', cast = str)
@@ -243,15 +248,15 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name', 'username']
 
-
 # Config JWT
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ["JWT"],
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10000),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "AUTH_TOKEN_CLASESS" : ("rest_framework_simplejwt.tokens.AccessToken",),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
 }
+
