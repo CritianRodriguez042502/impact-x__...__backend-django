@@ -192,3 +192,15 @@ class SearchBlogs (APIView):
 
         else:
             return Response({"erorr": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CreateCategorys (APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def post(self,request,format = None):
+        new_category = Categoryes.objects.create(
+            name = str(request.data["name"]),
+            slug = f"slug_{request.data['name']}"
+        )
+        new_category.save()
+        return Response("Muy bien")
