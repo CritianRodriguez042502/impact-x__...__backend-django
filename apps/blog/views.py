@@ -15,7 +15,6 @@ from apps.blog_reactions.serializer import LikesSerializer
 from apps.blog_reactions.models import CommentsBlog
 from apps.blog_reactions.serializer import CommentsBlogSerializer
 
-
 cache.clear()
 
 
@@ -198,9 +197,11 @@ class CreateCategorys (APIView):
     permission_classes = [permissions.AllowAny]
     
     def post(self,request,format = None):
-        new_category = Categoryes.objects.create(
-            name = str(request.data["name"]),
-            slug = f"slug_{request.data['name']}"
-        )
-        new_category.save()
-        return Response("Muy bien")
+        try :
+            new_category = Categoryes.objects.create(name = request.data["name"])
+            new_category.save()
+            return Response({"success" : "success"}, status=status.HTTP_200_OK)
+        
+        except:
+           return Response({"error" : "error"},status=status.HTTP_409_CONFLICT)
+    
