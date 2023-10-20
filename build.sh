@@ -6,7 +6,6 @@ set -o errexit
 pip install -r requirements.txt
 
 # Ejecuta las migraciones de la base de datos
-python manage.py makemigrations
 python manage.py migrate
 
 # Recoge archivos estáticos

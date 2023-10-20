@@ -196,24 +196,15 @@ EMAIL_HOST_USER = config('EMAIL_BACKEND', cast=str)
 EMAIL_HOST_PASSWORD = config('EMAIL_BACKEND_PASSWORD', cast=str)
 
 # Cors headers
-CORS_ALLOWED_ORIGINS = [
-    "https://github.com/CritianRodriguez042502/agency_view",
-    "github.com/CritianRodriguez042502/agency_view",
-    "https://github.com/CritianRodriguez042502/agency_view/",
-    "github.com/CritianRodriguez042502/agency_view/"
-]
 
-CORS_ORIGIN_WHITELIST = [
-    "https://github.com/CritianRodriguez042502/agency_view",
-    "github.com/CritianRodriguez042502/agency_view",
-    "https://github.com/CritianRodriguez042502/agency_view/",
-    "github.com/CritianRodriguez042502/agency_view/"
-]
+CORS_ALLOWED_ORIGINS = ["http://critianrodriguez042502.github.io"]
+CORS_ORIGIN_WHITELIST = ["http://critianrodriguez042502.github.io"]
+
 
 CORS_ALLOW_CREDENTIALS = True
 
 # Domain
-DOMAIN = 'github.com/CritianRodriguez042502/agency_view'
+DOMAIN = 'critianrodriguez042502.github.io'
 
 # Custom user model
 AUTH_USER_MODEL = "user_system.Model_users"
@@ -221,9 +212,9 @@ AUTH_USER_MODEL = "user_system.Model_users"
 # Djoser Config
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'PASSWORD_RESET_CONFIRM_URL': 'admin/reset_password/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'admin/reset_username/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'admin/user/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'agency_view/#/admin/reset_password/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'agency_view/#/admin/reset_username/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'agency_view/#/admin/user/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'RESEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
@@ -236,7 +227,7 @@ DJOSER = {
     #### Google ####
     'SOCIAL_AUTH_TOKEN_STRATEGY': "apps.user_system.strategy.TokenStrategy",
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
-        "https://github.com/CritianRodriguez042502/agency_view/access/signin"
+        "https://github.com/CritianRodriguez042502/agency_view/#/access/signin"
         ],
     
     'SERIALIZERS': {},
