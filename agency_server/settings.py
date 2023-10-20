@@ -196,14 +196,24 @@ EMAIL_HOST_USER = config('EMAIL_BACKEND', cast=str)
 EMAIL_HOST_PASSWORD = config('EMAIL_BACKEND_PASSWORD', cast=str)
 
 # Cors headers
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+CORS_ALLOWED_ORIGINS = [
+    "https://github.com/CritianRodriguez042502/agency_view",
+    "github.com/CritianRodriguez042502/agency_view",
+    "https://github.com/CritianRodriguez042502/agency_view/",
+    "github.com/CritianRodriguez042502/agency_view/"
+]
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:5173"]
+CORS_ORIGIN_WHITELIST = [
+    "https://github.com/CritianRodriguez042502/agency_view",
+    "github.com/CritianRodriguez042502/agency_view",
+    "https://github.com/CritianRodriguez042502/agency_view/",
+    "github.com/CritianRodriguez042502/agency_view/"
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
 # Domain
-DOMAIN = 'localhost:5173'
+DOMAIN = 'github.com/CritianRodriguez042502/agency_view'
 
 # Custom user model
 AUTH_USER_MODEL = "user_system.Model_users"
@@ -225,7 +235,9 @@ DJOSER = {
     
     #### Google ####
     'SOCIAL_AUTH_TOKEN_STRATEGY': "apps.user_system.strategy.TokenStrategy",
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ["http://localhost:5173/access/signin"],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
+        "https://github.com/CritianRodriguez042502/agency_view/access/signin"
+        ],
     
     'SERIALIZERS': {},
     
