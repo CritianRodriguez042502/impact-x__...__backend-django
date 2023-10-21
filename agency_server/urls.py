@@ -10,9 +10,10 @@ from django.contrib import admin
 from django.urls import path,include
 
 from django.http import JsonResponse
+from decouple import config
 
 def home (request):
-    return JsonResponse({"welcome" : "server"})
+    return JsonResponse({"welcome" : str(config("EMAIL_BACKEND"))})
 
 urlpatterns = [
     path('', home, name ="home"),
