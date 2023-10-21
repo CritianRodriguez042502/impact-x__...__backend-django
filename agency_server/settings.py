@@ -159,6 +159,17 @@ CKEDITOR_CONFIGS = {
 
 CKEDITOR_UPLOAD_PATH = "/media/"
 
+# Cors headers
+CORS_ALLOWED_ORIGINS = [
+    "https://critianrodriguez042502.github.io",
+    "http://localhost:5173"
+]
+CORS_ORIGIN_WHITELIST = [
+    "https://critianrodriguez042502.github.io",
+    "http://localhost:5173"
+]
+CORS_ALLOW_CREDENTIALS = True
+
 # Password hashers
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -195,13 +206,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_BACKEND', cast=str)
 EMAIL_HOST_PASSWORD = config('EMAIL_BACKEND_PASSWORD', cast=str)
 
-# Cors headers
-
-CORS_ALLOWED_ORIGINS = ["http://critianrodriguez042502.github.io"]
-CORS_ORIGIN_WHITELIST = ["http://critianrodriguez042502.github.io"]
-
-
-CORS_ALLOW_CREDENTIALS = True
 
 # Domain
 DOMAIN = 'critianrodriguez042502.github.io'
