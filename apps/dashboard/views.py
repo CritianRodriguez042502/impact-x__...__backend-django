@@ -227,23 +227,23 @@ def updateBlogsByUser(request):
     num_random = str(round(uniform(1, 400)))
 
     if filter_blog_user:
-        image = request.data.get("file")
+        image = request.data["img"]
         
         def uploadImg():
-            if image:
-                url = url_upload_img
-                info = {"key": key_upload_img}
-                res = requests.post(url=url, data=info, files={"image": image})
+            url = url_upload_img
+            info = {"key": key_upload_img}
+            res = requests.post(url=url, data=info, files={"image": image})
 
-                if res.status_code == 200:
-                    data = res.json()
-                    return data["data"]["url"]
+            if res.status_code == 200:
+                data = res.json()
+                return data["data"]["url"]
+            
+            return "error"
 
-                return "error"
-
-            return None  
-
-        new_url_image = uploadImg() 
+        new_url_image = "" 
+        
+        if image :
+            new_url_image = uploadImg() 
 
         for blog in filter_blog_user:
             blog.title = request.data["title"]
@@ -282,7 +282,6 @@ def updateBlogsByUser(request):
 
 
 
-
 @api_view(["DELETE"])
 @permission_classes(permission_classes=[permissions.IsAuthenticated])
 def DeleteBlogByUser(request):
@@ -296,4 +295,3 @@ def DeleteBlogByUser(request):
     else:
         return Response({"Error": "Error"}, status=status.HTTP_403_FORBIDDEN)
     
-
