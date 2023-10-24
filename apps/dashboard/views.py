@@ -104,7 +104,7 @@ def getUserBlogReactions(request):
 
 
 @api_view(["POST"])
-@permission_classes(permission_classes=[permissions.AllowAny])
+@permission_classes(permission_classes=[permissions.IsAuthenticated])
 @parser_classes(parser_classes=[JSONParser, FormParser, MultiPartParser])
 def createBlogUser(request):
     user = request.user
