@@ -140,14 +140,14 @@ def createBlogUser(request):
             return url_image
         
         if res.status_code != 200 :
-            return Response({"Error" : "Ah pasado un error al querer cargar la imagen"},status=405)
+            return Response({"Error" : "Ah pasado un error al querer cargar la imagen"},status=409)
         
     try:
         new_blog = Blogs.objects.create(
             title=request.data["title"],
             description=request.data["description"].capitalize(),
             public=public,
-            img_url = uploadImg(file=request.FILES["file"]),
+            img_url = uploadImg(file=request.data.get("file")),
             slug= slugify(str(user.username) + "slug" + str(request.data["title"])),
             content=str(request.data["content"]),
             category=select_category,
@@ -179,7 +179,7 @@ def createBlogUser(request):
                 title=request.data["title"],
                 description=request.data["description"].capitalize(),
                 public=public,
-                img_url = uploadImg(file=request.FILES["file"]),
+                img_url = uploadImg(file=request.data.get("file")),
                 slug=backup_slug,
                 content=str(request.data["content"]),
                 category=select_category,
