@@ -7,7 +7,7 @@ class Model_users (AbstractUser,PermissionsMixin):
     username = models.CharField(unique=True, max_length=50)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    img_url = models.URLField(max_length=240)
+    img_url = models.URLField(max_length=240, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=True)

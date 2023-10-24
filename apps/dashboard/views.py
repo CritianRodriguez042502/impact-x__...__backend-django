@@ -104,7 +104,7 @@ def getUserBlogReactions(request):
 
 
 @api_view(["POST"])
-@permission_classes(permission_classes=[permissions.IsAuthenticated])
+@permission_classes(permission_classes=[permissions.AllowAny])
 @parser_classes(parser_classes=[JSONParser, FormParser, MultiPartParser])
 def createBlogUser(request):
     user = request.user
@@ -243,6 +243,7 @@ def updateBlogsByUser(request):
             return False
         
         
+
     if filter_blog_user:
         for blog in filter_blog_user:
 
@@ -259,6 +260,7 @@ def updateBlogsByUser(request):
             if image_upload_process != False :
                 blog.img_url = image_upload_process
             
+
             blog.category = filter_category
 
             try:
