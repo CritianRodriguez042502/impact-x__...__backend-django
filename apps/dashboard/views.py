@@ -19,6 +19,8 @@ from apps.blog_reactions.models import LikeBlog, CommentsBlog
 from apps.blog_reactions.serializer import LikesSerializer, CommentsBlogSerializer
 
 from random import uniform
+from decouple import config
+import requests
 
 
 # =============== Isauthenticated user ===============
@@ -106,6 +108,8 @@ def getUserBlogReactions(request):
 @parser_classes(parser_classes=[JSONParser, FormParser, MultiPartParser])
 def createBlogUser(request):
     user = request.user
+    url_upload_img = config("URL_UPLOAD_IMG")
+    key_upload_img = config("KEY_UPLOAD_IMG")
     select_category = Categoryes.objects.get(name=request.data["category"])
 
     string_random = str(generate_random_string(25)).lower()
@@ -117,13 +121,32 @@ def createBlogUser(request):
         public = True
     else:
         public = False
-
+        
+    def uploadImg (file) :
+        url = url_upload_img
+        
+        info = {
+            "key" : key_upload_img
+        }
+        
+        if not file :
+            return Response({"Error": "No se a proporsionado imagen"}, status=status.HTTP_409_CONFLICT)
+        
+        res = requests.post(url=url, data=info,files=file)
+        
+        if res.status_code == 200 : 
+            data = res.json()
+            return data["data"]["url"]
+        
+        if res.status_code != 200 :
+            return Response({"Error" : "Ah pasado un error al querer cargar la imagen"})
+        
     try:
         new_blog = Blogs.objects.create(
             title=request.data["title"],
             description=request.data["description"].capitalize(),
             public=public,
-            img = request.FILES["file"],
+            img_url = uploadImg(request.FILES["file"]),
             slug=slugify(str(user.username) + "slug" + str(request.data["title"])),
             content=str(request.data["content"]),
             category=select_category,
@@ -155,7 +178,7 @@ def createBlogUser(request):
                 title=request.data["title"],
                 description=request.data["description"].capitalize(),
                 public=public,
-                img = request.FILES["file"],
+                img_url = uploadImg(request.FILES["file"]),
                 slug=backup_slug,
                 content=str(request.data["content"]),
                 category=select_category,
@@ -188,13 +211,38 @@ def createBlogUser(request):
 def updateBlogsByUser(request):
     slug = request.query_params.get("slug")
     user = request.user
+    
+    url_upload_img = config("URL_UPLOAD_IMG")
+    key_upload_img = config("KEY_UPLOAD_IMG")
+    
     filter_blog_user = Blogs.objects.filter(user=user.id, slug=slug)
     filter_category = Categoryes.objects.get(
         name=str(request.data["category"]))
 
     string_random = str(generate_random_string(25)).lower()
     num_random = str(round(uniform(1, 400)))
-
+    
+    def uploadImg (file) :
+        url = url_upload_img
+        
+        info = {
+            "key" : key_upload_img
+        }
+        
+        if file :
+            res = requests.post(url=url, data=info,files=file)
+        
+            if res.status_code == 200 : 
+                data = res.json()
+                return data["data"]["url"]
+        
+            if res.status_code != 200 :
+                return Response({"Error" : "Ah pasado un error al querer cargar la imagen"})
+        
+        else : 
+            return False
+        
+        
     if filter_blog_user:
         for blog in filter_blog_user:
 
@@ -207,11 +255,10 @@ def updateBlogsByUser(request):
             else:
                 blog.public = False
             
-            try :
-                blog.img = request.FILES["file"]
-            except :
-                False
-                
+            image_upload_process = uploadImg(request.FILES["file"])
+            if image_upload_process != False :
+                blog.img_url = image_upload_process
+            
             blog.category = filter_category
 
             try:

@@ -29,7 +29,7 @@ class Blogs (models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField()
-    img = models.ImageField(upload_to="img_blogs", blank=True)
+    img_url = models.URLField(max_length=200)
     content = RichTextField(config_name='ckeditor')
     public = models.BooleanField(default=False)
     creation = models.DateField(auto_now_add=True)
