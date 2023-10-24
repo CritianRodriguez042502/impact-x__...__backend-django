@@ -211,49 +211,41 @@ def createBlogUser(request):
 
 
 @api_view(["PUT"])
-@permission_classes(permission_classes=[permissions.IsAuthenticated])
-@parser_classes(parser_classes=[JSONParser,FormParser, MultiPartParser])
+@permission_classes([permissions.IsAuthenticated])
+@parser_classes([JSONParser, FormParser, MultiPartParser])
 def updateBlogsByUser(request):
     slug = request.query_params.get("slug")
     user = request.user
-    
+
     url_upload_img = config("URL_UPLOAD_IMG")
     key_upload_img = config("KEY_UPLOAD_IMG")
-    
+
     filter_blog_user = Blogs.objects.filter(user=user.id, slug=slug)
     filter_category = Categoryes.objects.get(name=str(request.data["category"]))
 
     string_random = str(generate_random_string(25)).lower()
     num_random = str(round(uniform(1, 400)))
-    
-    
+
     if filter_blog_user:
         image = request.data.get("file")
         
-        def uploadImg () :
-            url = url_upload_img
-        
-            info = {
-                "key" : key_upload_img
-            }
-        
-            if image :
-                res = requests.post(url=url, data=info,files={"image" : image})
-        
-                if res.status_code == 200 : 
+        def uploadImg():
+            if image:
+                url = url_upload_img
+                info = {"key": key_upload_img}
+                res = requests.post(url=url, data=info, files={"image": image})
+
+                if res.status_code == 200:
                     data = res.json()
                     return data["data"]["url"]
-        
-                if res.status_code != 200 :
-                    return "error"
-        
-            else : 
-                return False
-    
-        new_url_image = uploadImg()
-        
-        for blog in filter_blog_user:
 
+                return "error"
+
+            return None  
+
+        new_url_image = uploadImg() 
+
+        for blog in filter_blog_user:
             blog.title = request.data["title"]
             blog.description = request.data["description"].capitalize()
             blog.content = request.data["content"]
@@ -262,30 +254,32 @@ def updateBlogsByUser(request):
                 blog.public = True
             else:
                 blog.public = False
-            
-            if new_url_image == "error" :
-                return Response({"Error" : "No se pudo cargar la imagen correctamente"})
-        
-            if new_url_image :
-                blog.img_url = new_url_image
-            
+
+            if new_url_image == "error":
+                return Response({"Error": "No se pudo cargar la imagen correctamente"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            if new_url_image:
+                blog.img_url = new_url_image  
+
             blog.category = filter_category
 
             try:
                 blog.slug = slugify(str(user.username) + "slug" + str(request.data["title"]))
                 blog.save()
                 return Response({"success": "update completed"}, status=status.HTTP_200_OK)
-
+            
             except:
+                
                 try:
-                    blog.slug = slugify(str(
-                        user.username) + "slug" + str(request.data["title"]) + string_random + num_random)
+                    blog.slug = slugify(str(user.username) + "slug" + str(request.data["title"]) + string_random + num_random)
                     blog.save()
                     return Response({"success": "update completed"}, status=status.HTTP_200_OK)
+                
                 except:
                     return Response({"Error": "Conflict"}, status=status.HTTP_409_CONFLICT)
     else:
         return Response({"Error": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
