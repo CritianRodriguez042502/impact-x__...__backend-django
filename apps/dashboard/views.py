@@ -169,7 +169,7 @@ def createBlogUser(request):
             return Response({"success": "Blog creado"}, status=status.HTTP_201_CREATED)
 
         except:
-            return Response({"error": "Error"}, status=status.HTTP_409_CONFLICT)
+            return Response({"error": "Error"}, status=401)
 
     except:
 
@@ -199,10 +199,11 @@ def createBlogUser(request):
                 return Response({"success": "Blog creado"}, status=status.HTTP_201_CREATED)
 
             except:
-                return Response({"error": "Error"}, status=status.HTTP_409_CONFLICT)
+                return Response({"error": "Error"}, status=402)
 
         except:
-            return Response({"error": "Error"}, status=status.HTTP_409_CONFLICT)
+            return Response({"error": "Error"}, status=403)
+
 
 
 @api_view(["PUT"])
