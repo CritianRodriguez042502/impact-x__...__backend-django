@@ -121,33 +121,36 @@ def createBlogUser(request):
         public = True
     else:
         public = False
-        
-    def uploadImg (file) :
+    
+    image = request.data.get("file")
+    
+    def uploadImg () :
         url = url_upload_img
         
         info = {
             "key" : key_upload_img
         }
         
-        if not file :
+        if not image :
             return Response({"Error": "No se a proporsionado imagen"}, status=status.HTTP_409_CONFLICT)
         
-        res = requests.post(url=url, data=info,files=file)
+        res = requests.post(url=url, data=info,files={"image" : image})
         
         if res.status_code == 200 : 
             data = res.json()
-            url_image = data["data"]["url"]
-            return url_image
+            return data["data"]["url"]
         
         if res.status_code != 200 :
             return Response({"Error" : "Ah pasado un error al querer cargar la imagen"},status=409)
-        
+    
+    new_url_image = uploadImg()
+    
     try:
         new_blog = Blogs.objects.create(
             title=request.data["title"],
             description=request.data["description"].capitalize(),
             public=public,
-            img_url = uploadImg(file=request.data.get("file")),
+            img_url = new_url_image,
             slug= slugify(str(user.username) + "slug" + str(request.data["title"])),
             content=str(request.data["content"]),
             category=select_category,
@@ -179,7 +182,7 @@ def createBlogUser(request):
                 title=request.data["title"],
                 description=request.data["description"].capitalize(),
                 public=public,
-                img_url = uploadImg(file=request.data.get("file")),
+                img_url = new_url_image,
                 slug=backup_slug,
                 content=str(request.data["content"]),
                 category=select_category,
@@ -218,35 +221,37 @@ def updateBlogsByUser(request):
     key_upload_img = config("KEY_UPLOAD_IMG")
     
     filter_blog_user = Blogs.objects.filter(user=user.id, slug=slug)
-    filter_category = Categoryes.objects.get(
-        name=str(request.data["category"]))
+    filter_category = Categoryes.objects.get(name=str(request.data["category"]))
 
     string_random = str(generate_random_string(25)).lower()
     num_random = str(round(uniform(1, 400)))
     
-    def uploadImg (file) :
-        url = url_upload_img
-        
-        info = {
-            "key" : key_upload_img
-        }
-        
-        if file :
-            res = requests.post(url=url, data=info,files=file)
-        
-            if res.status_code == 200 : 
-                data = res.json()
-                return data["data"]["url"]
-        
-            if res.status_code != 200 :
-                return Response({"Error" : "Ah pasado un error al querer cargar la imagen"})
-        
-        else : 
-            return False
-        
-        
-
+    
     if filter_blog_user:
+        image = request.data.get("file")
+        
+        def uploadImg () :
+            url = url_upload_img
+        
+            info = {
+                "key" : key_upload_img
+            }
+        
+            if image :
+                res = requests.post(url=url, data=info,files={"image" : image})
+        
+                if res.status_code == 200 : 
+                    data = res.json()
+                    return data["data"]["url"]
+        
+                if res.status_code != 200 :
+                    return "error"
+        
+            else : 
+                return False
+    
+        new_url_image = uploadImg()
+        
         for blog in filter_blog_user:
 
             blog.title = request.data["title"]
@@ -258,11 +263,12 @@ def updateBlogsByUser(request):
             else:
                 blog.public = False
             
-            image_upload_process = uploadImg(request.FILES["file"])
-            if image_upload_process != False :
-                blog.img_url = image_upload_process
+            if new_url_image == "error" :
+                return Response({"Error" : "No se pudo cargar la imagen correctamente"})
+        
+            if new_url_image :
+                blog.img_url = new_url_image
             
-
             blog.category = filter_category
 
             try:
@@ -280,6 +286,7 @@ def updateBlogsByUser(request):
                     return Response({"Error": "Conflict"}, status=status.HTTP_409_CONFLICT)
     else:
         return Response({"Error": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 @api_view(["DELETE"])
