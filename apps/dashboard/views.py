@@ -242,7 +242,7 @@ def updateBlogsByUser(request):
 
         new_url_image = "" 
         
-        if not image == "undefined" :
+        if image != "undefined" :
             new_url_image = uploadImg() 
 
         for blog in filter_blog_user:
@@ -255,11 +255,11 @@ def updateBlogsByUser(request):
             else:
                 blog.public = False
 
-            if not new_url_image:
-                return Response({"Error": "No se pudo cargar la imagen correctamente"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
             if new_url_image:
-                blog.img_url = new_url_image  
+                try :
+                    blog.img_url = new_url_image  
+                except : 
+                    False
 
             blog.category = filter_category
 
