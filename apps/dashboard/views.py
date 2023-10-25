@@ -227,7 +227,7 @@ def updateBlogsByUser(request):
     num_random = str(round(uniform(1, 400)))
 
     if filter_blog_user:
-        image = request.data["img"]
+        image = request.data.get("file")
         
         def uploadImg():
             url = url_upload_img
@@ -238,11 +238,11 @@ def updateBlogsByUser(request):
                 data = res.json()
                 return data["data"]["url"]
             
-            return "error"
+            return None
 
         new_url_image = "" 
         
-        if image :
+        if image != "undefined" :
             new_url_image = uploadImg() 
 
         for blog in filter_blog_user:
@@ -255,7 +255,7 @@ def updateBlogsByUser(request):
             else:
                 blog.public = False
 
-            if new_url_image == "error":
+            if not new_url_image:
                 return Response({"Error": "No se pudo cargar la imagen correctamente"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             if new_url_image:
