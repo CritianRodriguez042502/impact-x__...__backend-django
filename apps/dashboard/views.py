@@ -242,7 +242,7 @@ def updateBlogsByUser(request):
 
         new_url_image = "" 
         
-        if image != "undefined" :
+        if not image == "undefined" :
             new_url_image = uploadImg() 
 
         for blog in filter_blog_user:
