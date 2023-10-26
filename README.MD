@@ -16,14 +16,17 @@ Asegúrate de tener instalado Python y Django en tu entorno de desarrollo.
 
 ## Instalación
 
+
 1. Clona el repositorio :
 
     **git clone https://github.com/tuusuario/tuprojecto-backend.git**
 
 
+
 2. Navega al directorio del proyecto :
 
     **cd tuproyecto-backend**
+
 
 
 3. Crea un entorno virtual e instala las dependencias :
@@ -36,10 +39,13 @@ Asegúrate de tener instalado Python y Django en tu entorno de desarrollo.
 
 4. Configura las variables de entorno en un archivo `.env` siguiendo el formato proporcionado en `.env.example`.
 
+
 5. Realiza las migraciones y crea la base de datos :
 
    **python manage.py makemigrations
    python manage.py migrate**
+
+
 7. Inicia el proyecto :
 
    **python manage.py runserver**
