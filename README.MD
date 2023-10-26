@@ -1,5 +1,5 @@
 
-# IMPACT X | Backend |
+# 🧩 IMPACT X 🧩 | Backend |
 
 Este es el repositorio del backend de Impact X, la plataforma de blogs desarrollada en conjunto con React y Vite. El backend de Impact X gestiona la lógica de negocio y la comunicación con la base de datos para hacer funcionar todas las características del sistema.
 
@@ -35,6 +35,7 @@ Asegúrate de tener instalado Python y Django en tu entorno de desarrollo.
 
 
 4. Configura las variables de entorno en un archivo `.env` siguiendo el formato proporcionado en `.env.example`.
+
 5. Realiza las migraciones y crea la base de datos :
 
    **python manage.py makemigrations
