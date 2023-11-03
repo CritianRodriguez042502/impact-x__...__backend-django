@@ -20,6 +20,7 @@ urlpatterns = [
     path("user_system/", include("apps.user_system.urls")),
     path('blog/',include("apps.blog.urls")),
     path("blog_reactions/", include("apps.blog_reactions.urls")),
-    path("dashboard/", include("apps.dashboard.urls"))
+    path("dashboard/", include("apps.dashboard.urls")),
+    path("news/", include("apps.api_bbc_news.urls"))
 ] 
 urlpatterns.extend(static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT))

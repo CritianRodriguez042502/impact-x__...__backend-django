@@ -44,6 +44,7 @@ APPS_PROJECT = [
     'apps.blog',
     'apps.dashboard',
     'apps.blog_reactions',
+    'apps.api_bbc_news',
 ]
 
 LIBRERIS = [
