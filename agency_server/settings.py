@@ -164,10 +164,13 @@ CKEDITOR_UPLOAD_PATH = "/media/"
 CORS_ALLOWED_ORIGINS = [
     "https://critianrodriguez042502.github.io",
     
+    
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "https://critianrodriguez042502.github.io",
+    
+   
     
 ]
 
