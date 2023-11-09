@@ -165,13 +165,13 @@ CKEDITOR_UPLOAD_PATH = "/media/"
 # Cors headers
 CORS_ALLOWED_ORIGINS = [
     "https://impact-x.onrender.com",
-    "https://bbc-news-api.onrender.com",
+    "https://api-news-v2.onrender.com",
     "https://web-portfolio-z9ym.onrender.com",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "https://impact-x.onrender.com",
-    "https://bbc-news-api.onrender.com",
+    "https://api-news-v2.onrender.com",
     "https://web-portfolio-z9ym.onrender.com",
 ]
 
