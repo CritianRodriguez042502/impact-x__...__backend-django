@@ -19,7 +19,7 @@ Asegúrate de tener instalado Python y Django en tu entorno de desarrollo.
 
 1. Clona el repositorio :
 
-    **git clone https://github.com/tuusuario/tuprojecto-backend.git**
+    **git clone https://github.com/CritianRodriguez042502/agency_server.git**
 
 
 
