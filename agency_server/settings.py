@@ -163,28 +163,18 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_UPLOAD_PATH = "/media/"
 
 # Cors headers
+CORS_ALLOWED_ORIGINS = [
+    "https://critianrodriguez042502.github.io",
+    "https://bbc-news-api.onrender.com",
+    "https://web-portfolio-z9ym.onrender.com"
+]
 
-if 'RENDER' in os.environ:
-    CORS_ALLOWED_ORIGINS = [
+CORS_ORIGIN_WHITELIST = [
     "https://critianrodriguez042502.github.io",
     "https://bbc-news-api.onrender.com",
     "https://web-portfolio-z9ym.onrender.com",
     "http://localhost:5173"
-    ]
-    CORS_ORIGIN_WHITELIST = [
-    "https://critianrodriguez042502.github.io",
-    "https://bbc-news-api.onrender.com",
-    "https://web-portfolio-z9ym.onrender.com",
-    "http://localhost:5173"
-    ]
-else :
-    CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
-    ]
-    CORS_ORIGIN_WHITELIST = [
-    "http://localhost:5173"
-    ]
-
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
