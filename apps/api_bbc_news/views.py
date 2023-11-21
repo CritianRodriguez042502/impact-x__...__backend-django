@@ -2,10 +2,7 @@ from django.http import JsonResponse, HttpResponse
 from datetime import datetime
 import requests
 
-
-
 apiKey = "da09c7a07669433f86613d78bc8721ea"
-
 
 def news (request) :
     url = f'https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey={apiKey}'
