@@ -175,8 +175,12 @@ class SearchBlogs (APIView):
         if Blogs.objects.all():
             slug = request.query_params.get("slug")
             blogs_list = []
-            blogs = Blogs.objects.order_by(
-                "-creation").filter(Q(title__startswith=slug), public=True)
+            blogs = Blogs.objects.filter(
+                Q(title__icontains=slug) | 
+                Q(slug__icontains=slug) |
+                Q(description__icontains = slug),
+                public = True
+            )
             
             if blogs:
                 blogs_list.extend(blogs)
