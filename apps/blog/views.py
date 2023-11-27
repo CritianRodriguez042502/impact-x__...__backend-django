@@ -51,7 +51,6 @@ class AllBlogs(APIView):
             return Response({"Error": "No existen blogs amigo"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 # Blogs by category view
 class BlogsByCategoryView (APIView):
     permission_classes = [permissions.AllowAny]
@@ -84,6 +83,7 @@ class BlogsByCategoryView (APIView):
             return Response({"erorr": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+# Blog detail
 class BLogDetail (APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -103,7 +103,7 @@ class BLogDetail (APIView):
             return Response({"erorr": "not_Foundd"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
+# Get likes of blog
 class GetBlogLikes (APIView) :
     permission_classes = [permissions.AllowAny]
     
@@ -137,7 +137,7 @@ class GetBlogLikes (APIView) :
                 return Response({"erorr": "No existen blogs"}, status=status.HTTP_404_NOT_FOUND)
   
   
-  
+# get comments of blog
 class GetBlogComments (APIView) :
    permission_classes = [permissions.AllowAny]    
    
@@ -165,8 +165,8 @@ class GetBlogComments (APIView) :
         else :
             return Response({"erorr": "Aun no hay blogs registrados"}, status=status.HTTP_404_NOT_FOUND)
                 
-                
-    
+   
+# search blog                  
 class SearchBlogs (APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -177,10 +177,10 @@ class SearchBlogs (APIView):
             blogs_list = []
             blogs = Blogs.objects.order_by(
                 "-creation").filter(Q(title__startswith=slug), public=True)
-            blogs_list.extend(blogs)
-            blogs_list.reverse()
             
             if blogs:
+                blogs_list.extend(blogs)
+                blogs_list.reverse()
                 pagination = BigPagination()
                 response = pagination.paginate_queryset(blogs_list, request)
                 serializer = BlogsSerializers(response, many=True)
@@ -193,6 +193,7 @@ class SearchBlogs (APIView):
             return Response({"erorr": "not_Found"}, status=status.HTTP_404_NOT_FOUND)
         
 
+# first create category initial jejejejeje
 class CreateCategorys (APIView):
     permission_classes = [permissions.AllowAny]
     
