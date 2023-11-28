@@ -217,7 +217,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_BACKEND_PASSWORD', cast=str)
 
 
 # Domain
-DOMAIN = 'critianrodriguez042502.github.io'
+DOMAIN = 'impact-x.onrender.com'
 
 # Custom user model
 AUTH_USER_MODEL = "user_system.Model_users"
@@ -225,9 +225,9 @@ AUTH_USER_MODEL = "user_system.Model_users"
 # Djoser Config
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'PASSWORD_RESET_CONFIRM_URL': 'agency_view/#/admin/reset_password/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'agency_view/#/admin/reset_username/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'agency_view/#/admin/user/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'admin/reset_password/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'admin/reset_username/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'admin/user/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'RESEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
