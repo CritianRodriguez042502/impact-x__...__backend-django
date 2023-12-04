@@ -167,14 +167,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://impact-x.onrender.com",
     "https://api-news-v2.onrender.com",
     "https://web-portfolio-z9ym.onrender.com",
-    "http://localhost:5173",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "https://impact-x.onrender.com",
     "https://api-news-v2.onrender.com",
     "https://web-portfolio-z9ym.onrender.com",
-    "http://localhost:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
