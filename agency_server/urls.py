@@ -9,10 +9,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
 from django.http import JsonResponse
-import os
 
 def home (request):
-    return JsonResponse({"welcome" : "Server", "data" : f"{os.environ}" })
+    return JsonResponse({"welcome" : "Server"})
 
 urlpatterns = [
     path('', home, name ="home"),
