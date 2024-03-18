@@ -30,7 +30,7 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Default apps
-DEFAULT_APPS = [
+DEFAULT_APPS_DJANGO = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,7 +60,7 @@ LIBRERIS = [
 ]
 
 INSTALLED_APPS = []
-INSTALLED_APPS.extend(DEFAULT_APPS)
+INSTALLED_APPS.extend(DEFAULT_APPS_DJANGO)
 INSTALLED_APPS.extend(APPS_PROJECT)
 INSTALLED_APPS.extend(LIBRERIS)
 
@@ -107,23 +107,10 @@ TEMPLATES = [
 # ---------------------------------------
 # Data base
 
-if 'RENDER' in os.environ:
-    DATABASES = {
+DATABASES = {
         'default': dj_database_url.config(
             default='postgresql://postgres:postgres@localhost/postgres',
         )
-    }
-    
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config("DB_NAME", cast=str),
-            'USER': config("DB_USER", cast=str),
-            'PASSWORD': config("DB_PASSWORD", cast=str),
-            'HOST': config("DB_HOST", cast=str),
-            'PORT': config("DB_PORT", cast=str),
-        }
     }
 
 #------------------------------------------

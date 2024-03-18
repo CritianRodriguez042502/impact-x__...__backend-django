@@ -8,11 +8,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
-
 from django.http import JsonResponse
+import os
 
 def home (request):
-    return JsonResponse({"welcome" : "Server" })
+    return JsonResponse({"welcome" : "Server", "data" : f"{os.environ}" })
 
 urlpatterns = [
     path('', home, name ="home"),
