@@ -113,8 +113,6 @@ DATABASES = {
             'NAME': "data_base" ,
             'USER': "data_base_6dzn_user",
             'PASSWORD': "W8E2Cn7qXgLOwvNfBL4gH6126WhaRpyj" ,
-            'HOST':"dpg-cns71c21hbls738sps9g-a" ,
-            'PORT': "5432",
         }
     }
 
