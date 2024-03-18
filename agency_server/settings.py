@@ -107,16 +107,30 @@ TEMPLATES = [
 # ---------------------------------------
 # Data base
 
-DATABASES = {
+if 'RENDER' in os.environ:
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'HOST' : "dpg-cns71c21hbls738sps9g-a",
-            'NAME': "data_base_6dzn" ,
-            'USER': "data_base_6dzn_user",
-            'PASSWORD': "W8E2Cn7qXgLOwvNfBL4gH6126WhaRpyj" ,
-            'PORT' : "5432"
+            'NAME': config("PROD_DB_NAME", cast=str),
+            'USER': config("PROD_DB_USER", cast=str),
+            'PASSWORD': config("PROD_DB_PASSWORD", cast=str),
+            'HOST': config("PROD_DB_HOST", cast=str),
+            'PORT': config("PROD_DB_PORT", cast=str),
         }
     }
+    
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config("DEV_DB_NAME", cast=str),
+            'USER': config("DEV_DB_USER", cast=str),
+            'PASSWORD': config("DEV_DB_PASSWORD", cast=str),
+            'HOST': config("DEV_DB_HOST", cast=str),
+            'PORT': config("DEV_DB_PORT", cast=str),
+        }
+    }
+
 
 #------------------------------------------
 
