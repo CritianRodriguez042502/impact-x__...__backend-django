@@ -110,10 +110,11 @@ TEMPLATES = [
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'HOST' : "dpg-cns71c21hbls738sps9g-a",
             'NAME': "data_base_6dzn" ,
             'USER': "data_base_6dzn_user",
             'PASSWORD': "W8E2Cn7qXgLOwvNfBL4gH6126WhaRpyj" ,
-            "PORT" : "5432"
+            'PORT' : "5432"
         }
     }
 
