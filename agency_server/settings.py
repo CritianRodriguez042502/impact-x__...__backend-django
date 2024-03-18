@@ -108,9 +108,14 @@ TEMPLATES = [
 # Data base
 
 DATABASES = {
-        'default': dj_database_url.config(
-            default='postgresql://postgres:postgres@localhost/postgres',
-        )
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': "data_base" ,
+            'USER': "data_base_6dzn_user",
+            'PASSWORD': "W8E2Cn7qXgLOwvNfBL4gH6126WhaRpyj" ,
+            'HOST':"dpg-cns71c21hbls738sps9g-a" ,
+            'PORT': "5432",
+        }
     }
 
 #------------------------------------------
