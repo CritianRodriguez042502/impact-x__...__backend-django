@@ -10,11 +10,11 @@ from django.contrib import admin
 from django.urls import path,include
 from django.http import JsonResponse
 
-def home (request):
-    return JsonResponse({"welcome" : "Server"})
+def activate_server (request):
+    return JsonResponse({"server" : "activate"})
 
 urlpatterns = [
-    path('', home, name ="home"),
+    path('', activate_server, name ="Activate server"),
     path('admin/', admin.site.urls),
     path("user_system/", include("apps.user_system.urls")),
     path('blog/',include("apps.blog.urls")),

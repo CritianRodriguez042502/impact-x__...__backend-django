@@ -2,8 +2,6 @@
 Django settings for agency_server project.
 Django version = 4.2.4.
 """
-from django.conf import settings
-import dj_database_url
 from datetime import timedelta
 from pathlib import Path
 import os
@@ -55,8 +53,6 @@ LIBRERIS = [
     'djoser',
     'social_django',
     'corsheaders',
-    'ckeditor',
-    'ckeditor_uploader',
 ]
 
 INSTALLED_APPS = []
@@ -165,26 +161,9 @@ MIDDLEWARE.insert(1,'social_django.middleware.SocialAuthExceptionMiddleware')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# Config ckeditor
-CKEDITOR_CONFIGS = {
-    'ckeditor': {'toolbar': 'Full',}
-    }
-
-CKEDITOR_UPLOAD_PATH = "/media/"
-
 # Cors headers
-CORS_ALLOWED_ORIGINS = [
-    "https://impact-x.onrender.com",
-    "https://api-news-v2.onrender.com",
-    "https://web-portfolio-z9ym.onrender.com",
-]
-
-CORS_ORIGIN_WHITELIST = [
-    "https://impact-x.onrender.com",
-    "https://api-news-v2.onrender.com",
-    "https://web-portfolio-z9ym.onrender.com",
-]
-
+CORS_ALLOWED_ORIGINS = config("DOMAINS", cast=list)
+CORS_ORIGIN_WHITELIST = config("DOMAINS", cast=list)
 CORS_ALLOW_CREDENTIALS = True
 
 # Password hashers
@@ -250,8 +229,6 @@ DJOSER = {
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
         "https://github.com/CritianRodriguez042502/agency_view/#/access/signin"
         ],
-    
-    'SERIALIZERS': {},
     
     'EMAIL': {
         'activation': 'apps.user_system.email.Activation',

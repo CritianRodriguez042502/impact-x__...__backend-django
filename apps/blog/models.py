@@ -1,5 +1,4 @@
 from django.db import models
-from ckeditor.fields import RichTextField
 from django.utils.text import slugify
 
 from apps.user_system.models import Model_users
@@ -30,7 +29,7 @@ class Blogs (models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField()
     img_url = models.URLField(max_length=200)
-    content = RichTextField(config_name='ckeditor')
+    content = models.TextField(blank=True)
     public = models.BooleanField(default=False)
     creation = models.DateField(auto_now_add=True)
     update = models.DateField(auto_now=True)
