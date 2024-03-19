@@ -162,8 +162,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Cors headers
-CORS_ALLOWED_ORIGINS = config("DOMAINS", cast=list)
-CORS_ORIGIN_WHITELIST = config("DOMAINS", cast=list)
+CORS_ALLOWED_ORIGINS = config("DOMAINS", cast=str).split(",")
+CORS_ORIGIN_WHITELIST = config("DOMAINS", cast=str).split(",")
 CORS_ALLOW_CREDENTIALS = True
 
 # Password hashers
