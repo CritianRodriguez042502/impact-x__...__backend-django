@@ -69,6 +69,7 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](https://
 Para preguntas o comentarios, puedes contactarme a través de [cuentagit1111@gmail.com](mailto:cuentagit1111@gmail.com).
 
 
+
 ## Agradecimientos
 
 Agradecemos a todos los colaboradores que han hecho posible el desarrollo del backend de Impact X.
