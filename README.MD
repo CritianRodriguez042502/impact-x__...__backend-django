@@ -22,7 +22,7 @@ Blogify is a modern blogging platform that allows users to create, manage, and i
 
 ## Technologies 💻
 
-- Vite  
-- React  
-- Redux  
-- CSS Modules  
+- Python
+- Django  
+- Django rest framework 
+- Djoser
